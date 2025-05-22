@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.assertThrows
 
 class GridServiceTest {
 
@@ -95,7 +96,7 @@ class GridServiceTest {
         // Then
         assertNotNull(result)
         result!!.cells.forEach { cell ->
-                assertEquals(0, cell.value, "Cell with Fibonacci number should be cleared")
+            assertEquals(0, cell.value, "Cell with Fibonacci number should be cleared")
         }
     }
 
@@ -119,7 +120,7 @@ class GridServiceTest {
     }
 
     @Test
-    fun `should throw invalidClickException for invalid cell click`() {
+    fun `should throw InvalidCellClickException for invalid cell click`() {
         // Given
         val grid = Grid().apply {
             rows = 50
@@ -129,7 +130,7 @@ class GridServiceTest {
         every { gridRepository.findById(1) } returns grid
 
         // When
-        assertThrows<InvalidClickException> {
+        assertThrows<InvalidCellClickException> {
             gridService.handleCellClick(1, 51, 49)
         }
     }

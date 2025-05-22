@@ -36,10 +36,19 @@ class GridService(private val gridRepository: GridRepository) {
     @Transactional
     fun handleCellClick(gridId: Long, row: Int, column: Int): Grid? {
         val grid = gridRepository.findById(gridId) ?: return null
-
+        if (!isValidPosition(row, column, grid)) {
+            throw InvalidCellClickException(
+                "Client clicked an invalid cell position: row=$row, column=$column for " +
+                    "grid  = $gridId"
+            )
+        }
         incrementRowAndColumn(grid, row, column)
         detectAndClearFibonacciSequences(grid)
         return grid
+    }
+
+    private fun isValidPosition(row: Int, column: Int, grid: Grid): Boolean {
+        return row in 0 until grid.rows && column in 0 until grid.columns
     }
 
     private fun incrementRowAndColumn(grid: Grid, row: Int, column: Int) {
