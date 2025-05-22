@@ -2,8 +2,8 @@ package com.gridgame
 
 class Grid {
 
-    var rows = 0
-    var columns = 0
+    var rows = 50
+    var columns = 50
     var cells: MutableList<Cell> = mutableListOf()
 
     fun initialize() {
