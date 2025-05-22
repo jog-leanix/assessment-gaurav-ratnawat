@@ -191,4 +191,29 @@ class GridServiceTest {
             assertEquals(expectedValue, cell.value, "Cell values should be incremented by 1")
         }
     }
+
+    @Test
+    fun `should increment value on consecutive clicks over the same cell`() {
+        // Given
+        val grid = Grid().apply {
+            rows = 3
+            columns = 3
+            initialize()
+        }
+        every { gridRepository.findById(1) } returns grid
+
+        // When - click same cell twice
+        gridService.handleCellClick(1, 1, 1)
+        val result = gridService.handleCellClick(1, 1, 1)
+
+        // Then
+        assertNotNull(result)
+        result!!.cells.forEach { cell ->
+            when {
+                cell.row == 1 && cell.column == 1 -> assertEquals(2, cell.value)
+                cell.row == 1 || cell.column == 1 -> assertEquals(2, cell.value)
+                else -> assertEquals(0, cell.value)
+            }
+        }
+    }
 }
