@@ -1,4 +1,4 @@
-package com.gridgame
+package com.gridgame.model
 
 class Grid {
 

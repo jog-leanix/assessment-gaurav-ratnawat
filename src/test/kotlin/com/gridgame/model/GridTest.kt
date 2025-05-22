@@ -1,6 +1,5 @@
 package com.gridgame.model
 
-import com.gridgame.Grid
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
