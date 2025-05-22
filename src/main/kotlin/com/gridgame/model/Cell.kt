@@ -19,6 +19,12 @@ class Cell : PanacheEntity {
 
     @Column(nullable = false)
     var value: Int = 0
+        set(newValue) {
+            if (newValue < 0) {
+                throw IllegalArgumentException("Value must be non-negative")
+            }
+            field = newValue
+        }
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "grid_id")
