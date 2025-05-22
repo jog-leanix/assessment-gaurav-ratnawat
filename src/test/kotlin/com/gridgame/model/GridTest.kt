@@ -16,13 +16,14 @@ class GridTest {
     }
 
     @Test
-    fun `should initialize grid with zero cells`() {
-        assertEquals(0, grid.rows)
-        assertEquals(0, grid.columns)
-        assertEquals(0, grid.cells.size)
+    fun `should initialize grid with zero value cells`() {
+        assertEquals(5, grid.rows)
+        assertEquals(5, grid.columns)
+        assertEquals(25, grid.cells.size)
 
         for (cell in grid.cells) {
             assertEquals(0, cell.value)
         }
     }
+
 }
