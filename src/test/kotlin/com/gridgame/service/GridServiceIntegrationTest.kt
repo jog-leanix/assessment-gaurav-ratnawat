@@ -87,4 +87,31 @@ class GridServiceIntegrationTest {
             assertEquals(0, cell.value)
         }
     }
+
+    @Test
+    @Transactional
+    fun `should clear Fibonacci sequence in column`() {
+        // Given
+        val grid = gridRepository.findById(testGrid.id!!)!!
+        grid.cells.filter { it.column == 0 }.forEachIndexed { index, cell ->
+            cell.value = when(index) {
+                0 -> 0
+                1 -> 0
+                2 -> 1
+                3 -> 2
+                4 -> 4
+                else -> 0
+            }
+        }
+        gridRepository.persistAndFlush(grid)
+
+        // When
+        val updatedGrid = gridService.handleCellClick(testGrid.id!!, 0, 0)
+
+        // Then
+        assertNotNull(updatedGrid)
+        updatedGrid?.cells?.filter { it.column == 0 }?.forEach { cell ->
+            assertEquals(0, cell.value)
+        }
+    }
 }
