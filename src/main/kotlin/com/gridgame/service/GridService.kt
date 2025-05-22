@@ -25,9 +25,9 @@ class GridService(private val gridRepository: GridRepository) {
 
     @Transactional
     fun handleCellClick(gridId: Long, row: Int, column: Int): Grid? {
-        val grid = gridRepository.findById(gridId) ?: return null
+        val grid = gridRepository.findById(gridId) ?: throw GridNotFoundException("Grid not found: id = $gridId")
         if (grid.cells.isEmpty()) {
-            return null
+            throw InvalidCellClickException("Grid is empty: grid  = $gridId")
         }
         if (!isValidPosition(row, column, grid)) {
             throw InvalidCellClickException(
@@ -92,6 +92,5 @@ class GridService(private val gridRepository: GridRepository) {
     companion object {
 
         private const val FIBONACCI_SEQUENCE_LENGTH = 5
-        private val fibonacciSequence = listOf(0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144)
     }
 }
