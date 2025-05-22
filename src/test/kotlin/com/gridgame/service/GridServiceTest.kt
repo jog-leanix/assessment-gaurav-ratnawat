@@ -60,4 +60,15 @@ class GridServiceTest {
         }
         verify { gridRepository.findById(1) }
     }
+
+
+    @Test
+    fun `should return null when grid not found`() {
+        every { gridRepository.findById(999) } returns null
+
+        val result = gridService.handleCellClick(999, 1, 1)
+
+        assertNull(result)
+        verify { gridRepository.findById(999) }
+    }
 }
