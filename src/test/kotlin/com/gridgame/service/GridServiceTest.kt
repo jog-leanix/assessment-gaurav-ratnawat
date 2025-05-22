@@ -216,4 +216,34 @@ class GridServiceTest {
             }
         }
     }
+
+    @Test
+    fun `should clear first sequence incase of overlapping Fibonacci sequences`() {
+        // Given
+        val grid = Grid().apply {
+            rows = 1
+            columns = 7
+            cells = mutableListOf(
+                Cell(0, 0, 0, this),
+                Cell(0, 1, 0, this),
+                Cell(0, 2, 1, this),
+                Cell(0, 3, 2, this),
+                Cell(0, 4, 4, this),
+                Cell(0, 5, 7, this),
+                Cell(0, 6, 12, this)
+            )
+        }
+        every { gridRepository.findById(1) } returns grid
+
+        // When
+        val result = gridService.handleCellClick(1, 0, 0)
+
+        // Then
+        assertNotNull(result)
+        result!!.cells.take(5).forEach { cell ->
+            assertEquals(0, cell.value, "First sequence should be cleared")
+        }
+        assertEquals(8, result.cells[5].value, "Cell at index 5 should increase its value")
+        assertEquals(13, result.cells[6].value, "Cell at index 6 should increase its value")
+    }
 }
