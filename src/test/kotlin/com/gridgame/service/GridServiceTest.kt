@@ -118,4 +118,29 @@ class GridServiceTest {
         assertTrue(result!!.cells.isEmpty())
         verify { gridRepository.findById(1) }
     }
+
+    @Test
+    fun `should update value to zero for all Fibonacci numbers in grid`() {
+        // Given
+        val grid = Grid().apply {
+            rows = 2
+            columns = 2
+            cells = mutableListOf(
+                Cell(0, 0, 1, this),
+                Cell(0, 1, 2, this),
+                Cell(1, 0, 3, this),
+                Cell(1, 1, 5, this)
+            )
+        }
+        every { gridRepository.findById(1) } returns grid
+
+        // When
+        val result = gridService.handleCellClick(1, 0, 0)
+
+        // Then
+        assertNotNull(result)
+        result!!.cells.forEach { cell ->
+            assertEquals(0, cell.value, "All cells should be cleared as they contain Fibonacci numbers")
+        }
+    }
 }
