@@ -23,16 +23,6 @@ class GridService(private val gridRepository: GridRepository) {
         return grid
     }
 
-    /**
-     * Handles the click event on a cell in the grid.
-     * Increments the values in the clicked row and column.
-     * Checks for Fibonacci sequences and clears them if found.
-     *
-     * @param gridId The ID of the grid.
-     * @param row The row index of the clicked cell.
-     * @param column The column index of the clicked cell.
-     * @return The updated grid.
-     */
     @Transactional
     fun handleCellClick(gridId: Long, row: Int, column: Int): Grid? {
         val grid = gridRepository.findById(gridId) ?: return null
