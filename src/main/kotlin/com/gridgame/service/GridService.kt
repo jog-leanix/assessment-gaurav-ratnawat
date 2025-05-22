@@ -13,6 +13,7 @@ import jakarta.transaction.Transactional
 @ApplicationScoped
 class GridService(private val gridRepository: GridRepository) {
 
+    @Transactional
     fun initializeGrid(rows: Int, columns: Int): Grid {
         val grid = Grid().apply {
             this.rows = rows
@@ -22,16 +23,22 @@ class GridService(private val gridRepository: GridRepository) {
         return grid
     }
 
+    /**
+     * Handles the click event on a cell in the grid.
+     * Increments the values in the clicked row and column.
+     * Checks for Fibonacci sequences and clears them if found.
+     *
+     * @param gridId The ID of the grid.
+     * @param row The row index of the clicked cell.
+     * @param column The column index of the clicked cell.
+     * @return The updated grid.
+     */
     @Transactional
     fun handleCellClick(gridId: Long, row: Int, column: Int): Grid? {
         val grid = gridRepository.findById(gridId) ?: return null
 
-        // Increment values in the clicked row and column
         incrementRowAndColumn(grid, row, column)
-
-        // Check for Fibonacci sequences and clear if found
         detectAndClearFibonacciSequences(grid)
-
         return grid
     }
 
@@ -44,20 +51,22 @@ class GridService(private val gridRepository: GridRepository) {
     }
 
     private fun detectAndClearFibonacciSequences(grid: Grid) {
-        // Check horizontal sequences
         for (row in 0 until grid.rows) {
-            val cells = grid.cells.filter { it.row == row }
-                .sortedBy { it.column }
+            val cells = getCellsInRow(grid, row)
             checkAndClearSequence(cells)
         }
 
-        // Check vertical sequences
         for (col in 0 until grid.columns) {
-            val cells = grid.cells.filter { it.column == col }
-                .sortedBy { it.row }
+            val cells = getCellsInColumn(grid, col)
             checkAndClearSequence(cells)
         }
     }
+
+    private fun getCellsInRow(grid: Grid, row: Int) = grid.cells.filter { it.row == row }
+        .sortedBy { it.column }
+
+    private fun getCellsInColumn(grid: Grid, col: Int) = grid.cells.filter { it.column == col }
+        .sortedBy { it.row }
 
     private fun checkAndClearSequence(cells: List<Cell>) {
         for (i in 0..cells.size - FIBONACCI_SEQUENCE_LENGTH) {
@@ -84,7 +93,6 @@ class GridService(private val gridRepository: GridRepository) {
 
     companion object {
 
-        private const val GRID_SIZE = 50
         private const val FIBONACCI_SEQUENCE_LENGTH = 5
         private val fibonacciSequence = listOf(0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, 144)
     }
