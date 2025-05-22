@@ -1,7 +1,5 @@
-package com.gridgame
+package com.gridgame.model
 
-import com.gridgame.model.Cell
-import com.gridgame.model.Grid
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertSame
 import org.junit.jupiter.api.BeforeEach
