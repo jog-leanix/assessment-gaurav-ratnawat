@@ -9,6 +9,7 @@ import io.mockk.verify
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -62,7 +63,6 @@ class GridServiceTest {
         verify { gridRepository.findById(1) }
     }
 
-
     @Test
     fun `should return null when grid not found`() {
         every { gridRepository.findById(999) } returns null
@@ -98,5 +98,24 @@ class GridServiceTest {
                 assertEquals(0, cell.value)
             }
         }
+    }
+
+    @Test
+    fun `should return null for empty grid`() {
+        // Given
+        val grid = Grid().apply {
+            rows = 0
+            columns = 0
+            cells = mutableListOf()
+        }
+        every { gridRepository.findById(1) } returns grid
+
+        // When
+        val result = gridService.handleCellClick(1, 0, 0)
+
+        // Then
+        assertNotNull(result)
+        assertTrue(result!!.cells.isEmpty())
+        verify { gridRepository.findById(1) }
     }
 }
