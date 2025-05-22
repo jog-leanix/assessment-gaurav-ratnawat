@@ -1,9 +1,22 @@
 package com.gridgame.model
 
-class Grid {
+import io.quarkus.hibernate.orm.panache.kotlin.PanacheEntity
+import jakarta.persistence.CascadeType
+import jakarta.persistence.Column
+import jakarta.persistence.Entity
+import jakarta.persistence.FetchType
+import jakarta.persistence.OneToMany
 
+@Entity
+class Grid : PanacheEntity() {
+
+    @Column(nullable = false)
     var rows = SIZE
+
+    @Column(nullable = false)
     var columns = SIZE
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = [CascadeType.ALL], mappedBy = "grid", orphanRemoval = true)
     var cells: MutableList<Cell> = mutableListOf()
 
     fun initialize() {
