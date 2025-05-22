@@ -114,4 +114,17 @@ class GridServiceIntegrationTest {
             assertEquals(0, cell.value)
         }
     }
+
+    @Test
+    @Transactional
+    fun `should handle multiple cell clicks`() {
+        // When
+        gridService.handleCellClick(testGrid.id!!, 0, 0)
+        val updatedGrid = gridService.handleCellClick(testGrid.id!!, 0, 1)
+
+        // Then
+        assertNotNull(updatedGrid)
+        val cell = updatedGrid?.cells?.find { it.row == 0 && it.column == 0 }
+        assertEquals(2, cell?.value)
+    }
 }
