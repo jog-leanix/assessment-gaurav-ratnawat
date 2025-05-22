@@ -51,4 +51,13 @@ class CellTest {
         cell.value = validValue
         assertEquals(validValue, cell.value)
     }
+
+    @ParameterizedTest
+    @ValueSource(ints = [-1, -42, Int.MIN_VALUE])
+    fun `should throw exception for negative values`(invalidValue: Int) {
+        val exception = assertThrows<IllegalArgumentException> {
+            cell.value = invalidValue
+        }
+        assertEquals("Value must be non-negative", exception.message)
+    }
 }
