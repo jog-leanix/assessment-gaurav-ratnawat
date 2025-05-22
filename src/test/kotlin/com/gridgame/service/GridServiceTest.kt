@@ -1,5 +1,6 @@
 package com.gridgame.service
 
+import com.gridgame.model.Cell
 import com.gridgame.model.Grid
 import com.gridgame.model.GridRepository
 import io.mockk.every
@@ -70,5 +71,32 @@ class GridServiceTest {
 
         assertNull(result)
         verify { gridRepository.findById(999) }
+    }
+
+    @Test
+    fun `should clear cells with Fibonacci numbers`() {
+        // Given
+        val grid = Grid().apply {
+            rows = 2
+            columns = 2
+            cells = mutableListOf(
+                Cell(0, 0, 3, this),
+                Cell(0, 1, 5, this),
+                Cell(1, 0, 7, this),
+                Cell(1, 1, 8, this)
+            )
+        }
+        every { gridRepository.findById(1) } returns grid
+
+        // When
+        val result = gridService.handleCellClick(1, 0, 0)
+
+        // Then
+        assertNotNull(result)
+        result!!.cells.forEach { cell ->
+            if (cell.value in listOf(3, 5, 8)) {
+                assertEquals(0, cell.value)
+            }
+        }
     }
 }
