@@ -2,8 +2,8 @@ package com.gridgame
 
 class Grid {
 
-    var rows = 50
-    var columns = 50
+    var rows = SIZE
+    var columns = SIZE
     var cells: MutableList<Cell> = mutableListOf()
 
     fun initialize() {
@@ -16,4 +16,8 @@ class Grid {
         }
     }
 
+    companion object {
+
+        private const val SIZE = 50
+    }
 }
