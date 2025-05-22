@@ -14,7 +14,7 @@ class Cell : PanacheEntity {
     @Column(nullable = false)
     var row: Int = 0
 
-    @Column(nullable = false)
+    @Column(name = "\"column\"", nullable = false)
     var column: Int = 0
 
     @Column(nullable = false)

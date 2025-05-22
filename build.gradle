@@ -16,9 +16,16 @@ dependencies {
     implementation("io.quarkus:quarkus-resteasy-reactive-jackson")
     implementation("io.quarkus:quarkus-kotlin")
     implementation("io.quarkus:quarkus-hibernate-orm-panache-kotlin")
+    implementation("io.quarkus:quarkus-jdbc-postgresql")
 
+    // test dependencies
+    testImplementation("org.testcontainers:postgresql:1.19.6")
     testImplementation("io.quarkus:quarkus-junit5")
     testImplementation("io.mockk:mockk:1.13.10")
+}
+
+test {
+    environment "TESTCONTAINERS_RYUK_DISABLED", "true"
 }
 
 java {
