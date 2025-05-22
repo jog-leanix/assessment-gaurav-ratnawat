@@ -44,4 +44,11 @@ class CellTest {
         assertEquals(value, testCell.value)
         assertSame(grid, testCell.grid)
     }
+
+    @ParameterizedTest
+    @ValueSource(ints = [0, 1, 42, 100, Int.MAX_VALUE])
+    fun `should allow setting valid values`(validValue: Int) {
+        cell.value = validValue
+        assertEquals(validValue, cell.value)
+    }
 }
