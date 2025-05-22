@@ -117,4 +117,24 @@ class GridServiceTest {
         assertTrue(result!!.cells.isEmpty())
         verify { gridRepository.findById(1) }
     }
+
+    @Test
+    fun `should throw invalidClickException for invalid cell click`() {
+        // Given
+        val grid = Grid().apply {
+            rows = 50
+            columns = 50
+            initialize()
+        }
+        every { gridRepository.findById(1) } returns grid
+
+        // When
+        val result = gridService.handleCellClick(1, 51, 49)
+
+        // Then
+        assertNotNull(result)
+        assertEquals(50, result!!.rows)
+        assertEquals(50, result.columns)
+        assertEquals(2500, result.cells.size)
+    }
 }
