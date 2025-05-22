@@ -9,7 +9,6 @@ import io.mockk.verify
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Assertions.assertNull
-import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -43,8 +42,8 @@ class GridServiceTest {
     fun `should handle cell click and increment values`() {
         // Given
         val grid = Grid().apply {
-            rows = 0
-            columns = 0
+            rows = 5
+            columns = 5
             initialize()
         }
         every { gridRepository.findById(1) } returns grid
@@ -114,8 +113,7 @@ class GridServiceTest {
         val result = gridService.handleCellClick(1, 0, 0)
 
         // Then
-        assertNotNull(result)
-        assertTrue(result!!.cells.isEmpty())
+        assertNull(result)
         verify { gridRepository.findById(1) }
     }
 
@@ -132,6 +130,32 @@ class GridServiceTest {
         // When
         assertThrows<InvalidCellClickException> {
             gridService.handleCellClick(1, 51, 49)
+        }
+    }
+
+    @Test
+    fun `should handle large Fibonacci number`() {
+        // Given
+        val grid = Grid().apply {
+            rows = 1
+            columns = 5
+            cells = mutableListOf(
+                Cell(0, 0, 232, this),
+                Cell(0, 1, 376, this),
+                Cell(0, 2, 609, this),
+                Cell(0, 3, 986, this),
+                Cell(0, 4, 1596, this)
+            )
+        }
+        every { gridRepository.findById(1) } returns grid
+
+        // When
+        val result = gridService.handleCellClick(1, 0, 0)
+
+        // Then
+        assertNotNull(result)
+        result!!.cells.forEach { cell ->
+            assertEquals(0, cell.value, "Cells should be cleared as they form a Fibonacci sequence")
         }
     }
 }
