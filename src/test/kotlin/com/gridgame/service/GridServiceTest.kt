@@ -129,12 +129,8 @@ class GridServiceTest {
         every { gridRepository.findById(1) } returns grid
 
         // When
-        val result = gridService.handleCellClick(1, 51, 49)
-
-        // Then
-        assertNotNull(result)
-        assertEquals(50, result!!.rows)
-        assertEquals(50, result.columns)
-        assertEquals(2500, result.cells.size)
+        assertThrows<InvalidClickException> {
+            gridService.handleCellClick(1, 51, 49)
+        }
     }
 }
