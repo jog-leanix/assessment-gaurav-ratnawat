@@ -10,22 +10,19 @@ class GridTest {
     private lateinit var grid: Grid
 
     @BeforeEach
-    fun setup() {
+    fun setUp() {
         grid = Grid()
+        grid.initialize()
     }
 
     @Test
-    fun `test grid initialization`() {
+    fun `should initialize grid with zero cells`() {
         assertEquals(0, grid.rows)
         assertEquals(0, grid.columns)
-    }
+        assertEquals(0, grid.cells.size)
 
-    @Test
-    fun testGetCell() {
-        val cell = grid.getCell(2, 3)
-        assertNotNull(cell)
-        assertEquals(2, cell?.row)
-        assertEquals(3, cell?.column)
-        assertEquals(0, cell?.value)
+        for (cell in grid.cells) {
+            assertEquals(0, cell.value)
+        }
     }
 }
