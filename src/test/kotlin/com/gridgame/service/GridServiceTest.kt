@@ -158,4 +158,37 @@ class GridServiceTest {
             assertEquals(0, cell.value, "Cells should be cleared as they form a Fibonacci sequence")
         }
     }
+
+    @Test
+    fun `should not clear large Fibonacci number cell if not in sequence`() {
+        // Given
+        val grid = Grid().apply {
+            rows = 1
+            columns = 5
+            cells = mutableListOf(
+                Cell(0, 0, 232, this),
+                Cell(0, 1, 376, this),
+                Cell(0, 2, 610, this),
+                Cell(0, 3, 986, this),
+                Cell(0, 4, 1596, this)
+            )
+        }
+        every { gridRepository.findById(1) } returns grid
+
+        // When
+        val result = gridService.handleCellClick(1, 0, 0)
+
+        // Then
+        assertNotNull(result)
+        result!!.cells.forEach { cell ->
+            val expectedValue = when (cell.column) {
+                0 -> 233  // 232 + 1
+                1 -> 377  // 376 + 1
+                2 -> 611  // 610 + 1
+                3 -> 987  // 986 + 1
+                else -> 1597 // 1596 + 1
+            }
+            assertEquals(expectedValue, cell.value, "Cell values should be incremented by 1")
+        }
+    }
 }
