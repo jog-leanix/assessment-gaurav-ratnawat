@@ -20,6 +20,7 @@ class GridService(private val gridRepository: GridRepository) {
             this.columns = columns
         }
         grid.initialize()
+        gridRepository.persistAndFlush(grid)
         return grid
     }
 
@@ -29,6 +30,7 @@ class GridService(private val gridRepository: GridRepository) {
         if (grid.cells.isEmpty()) {
             throw InvalidCellClickException("Grid is empty: grid  = $gridId")
         }
+
         if (!isValidPosition(row, column, grid)) {
             throw InvalidCellClickException(
                 "Client clicked an invalid cell position: row=$row, column=$column for " +
@@ -37,6 +39,8 @@ class GridService(private val gridRepository: GridRepository) {
         }
         incrementRowAndColumn(grid, row, column)
         detectAndClearFibonacciSequences(grid)
+
+        gridRepository.persistAndFlush(grid)
         return grid
     }
 
