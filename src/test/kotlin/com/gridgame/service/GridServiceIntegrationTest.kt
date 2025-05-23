@@ -8,6 +8,7 @@ import jakarta.inject.Inject
 import jakarta.transaction.Transactional
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 
@@ -26,7 +27,9 @@ class GridServiceIntegrationTest {
     @BeforeEach
     @Transactional
     fun setUp() {
-        gridRepository.deleteAll()
+        gridRepository.listAll().forEach { grid ->
+            gridRepository.delete(grid)
+        }
         testGrid = gridService.initializeGrid(5, 5)
     }
 
@@ -139,10 +142,25 @@ class GridServiceIntegrationTest {
         val result = gridService.getAllGrids()
 
         // Then
-        assertEquals(2, result.size)
+        assertEquals(3, result.size)
         assertTrue(result.any { it.id == grid1.id })
         assertTrue(result.any { it.id == grid2.id })
         assertTrue(result.any { it.rows == 3 && it.columns == 3 })
         assertTrue(result.any { it.rows == 4 && it.columns == 4 })
+    }
+
+    @Test
+    @Transactional
+    fun `should return empty list when no grids exist`() {
+        // Given - ensure database is clean
+        gridRepository.listAll().forEach { grid ->
+            gridRepository.delete(grid)
+        }
+
+        // When
+        val result = gridService.getAllGrids()
+
+        // Then
+        assertTrue(result.isEmpty())
     }
 }
