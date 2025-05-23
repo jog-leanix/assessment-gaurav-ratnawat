@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Grid Game</title>
+    <style>
+        .grid {
+            display: inline-block;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 20px;
+        }
+        .row {
+            display: flex;
+        }
+        .cell {
+            width: 40px;
+            height: 40px;
+            border: 1px solid #999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            margin: 2px;
+            background-color: #f0f0f0;
+        }
+        .cell:hover {
+            background-color: #e0e0e0;
+        }
+        .controls {
+            margin: 20px;
+        }
+        .error {
+            color: red;
+            margin: 10px;
+        }
+    </style>
+</head>
+<body>
+<div class="controls">
+    <h2>Create New Grid</h2>
+    <input type="number" id="rows" placeholder="Rows" value="3" min="1">
+    <input type="number" id="columns" placeholder="Columns" value="3" min="1">
+    <button onclick="createGrid()">Create Grid</button>
+</div>
+
+<div id="error" class="error"></div>
+<div id="gridContainer"></div>
+
+<script>
+    const API_URL = '/grid';
+
+    function showError(message) {
+        const errorDiv = document.getElementById('error');
+        errorDiv.textContent = message;
+    }
+
+    function clearError() {
+        const errorDiv = document.getElementById('error');
+        errorDiv.textContent = '';
+    }
+
+    async function handleResponse(response) {
+        const contentType = response.headers.get('content-type');
+        if (contentType && contentType.includes('application/json')) {
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error(data.message || 'Unknown error occurred');
+            }
+            return data;
+        }
+        throw new Error('Invalid response format');
+    }
+
+    async function createGrid() {
+        clearError();
+        const rows = document.getElementById('rows').value;
+        const columns = document.getElementById('columns').value;
+
+        try {
+            const response = await fetch(`${API_URL}?rows=${rows}&columns=${columns}`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+            const grid = await handleResponse(response);
+            displayGrid(grid);
+        } catch (error) {
+            showError(`Error creating grid: ${error.message}`);
+        }
+    }
+
+    async function clickCell(gridId, row, column) {
+        clearError();
+        try {
+            const response = await fetch(`${API_URL}/${gridId}/click?row=${row}&column=${column}`, {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json'
+                }
+            });
+            const updatedGrid = await handleResponse(response);
+            displayGrid(updatedGrid);
+        } catch (error) {
+            showError(`Error clicking cell: ${error.message}`);
+        }
+    }
+
+    function displayGrid(grid) {
+        const container = document.getElementById('gridContainer');
+        const gridElement = document.createElement('div');
+        gridElement.className = 'grid';
+        gridElement.innerHTML = `<h3>Grid ${grid.id}</h3>`;
+
+        for (let i = 0; i < grid.rows; i++) {
+            const row = document.createElement('div');
+            row.className = 'row';
+
+            for (let j = 0; j < grid.columns; j++) {
+                const cell = document.createElement('div');
+                cell.className = 'cell';
+                const cellData = grid.cells.find(c => c.row === i && c.column === j);
+                cell.textContent = cellData ? cellData.value : '0';
+                cell.onclick = () => clickCell(grid.id, i, j);
+                row.appendChild(cell);
+            }
+
+            gridElement.appendChild(row);
+        }
+
+        container.innerHTML = '';
+        container.appendChild(gridElement);
+    }
+
+    // Create initial grid when page loads
+    document.addEventListener('DOMContentLoaded', () => createGrid());
+</script>
+</body>
+</html>

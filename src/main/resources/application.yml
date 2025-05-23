@@ -1,0 +1,16 @@
+quarkus:
+  quarkus:
+    log:
+      level=DEBUG:
+  datasource:
+    db-kind: postgresql
+    username: postgres
+    password: postgres
+    jdbc:
+      url: jdbc:postgresql://localhost:5432/gridgame
+  hibernate-orm:
+    database:
+      generation: drop-and-create
+    log:
+      sql=true
+      physical-naming-strategy=org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
