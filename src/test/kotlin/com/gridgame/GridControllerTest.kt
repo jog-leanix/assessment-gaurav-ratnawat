@@ -30,6 +30,7 @@ class GridControllerTest {
         gridId = response.path("id")
     }
 
+
     @Test
     fun `should create grid with default values when no parameters provided`() {
         given()
@@ -67,5 +68,17 @@ class GridControllerTest {
             .body("rows", `is`(50))
             .body("columns", `is`(5))
             .body("cells.size()", `is`(250))
+    }
+
+    @Test
+    fun `should verify all cells are initialized with zero`() {
+        given()
+            .queryParam("rows", 2)
+            .queryParam("columns", 2)
+            .`when`()
+            .post("/grid")
+            .then()
+            .statusCode(201)
+            .body("cells.value", `is`(listOf(0, 0, 0, 0)))
     }
 }
