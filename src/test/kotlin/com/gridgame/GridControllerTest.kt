@@ -3,6 +3,9 @@ package com.gridgame
 import io.quarkus.test.junit.QuarkusTest
 import io.restassured.RestAssured.given
 import org.hamcrest.CoreMatchers.notNullValue
+import org.hamcrest.Matchers
+import org.hamcrest.Matchers.everyItem
+import org.hamcrest.Matchers.hasSize
 import org.hamcrest.Matchers.`is`
 import org.junit.jupiter.api.Nested
 import org.junit.jupiter.api.Test
@@ -99,6 +102,21 @@ class GridControllerTest {
                 .then()
                 .statusCode(200)
                 .body("size()", org.hamcrest.Matchers.greaterThan(0))
+        }
+
+        @Test
+        fun `should return correct response structure`() {
+            createTestGrid(3, 3)
+            createTestGrid(4, 4)
+            given()
+                .`when`()
+                .get("/grid")
+                .then()
+                .statusCode(200)
+                .statusCode(200)
+                .body("rows", everyItem(Matchers.greaterThan(0)))
+                .body("columns", everyItem(Matchers.greaterThan(0)))
+                .body("cells", everyItem(hasSize<Int>(Matchers.greaterThan(0))))
         }
 
         private fun createTestGrid(rows: Int, columns: Int) {
