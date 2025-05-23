@@ -49,9 +49,14 @@ class GridController {
     @Path("/{id}/click")
     fun clickCell(
         @PathParam("id") gridId: Long,
-        @QueryParam("row") row: Int,
-        @QueryParam("column") column: Int
+        @QueryParam("row") row: Int?,
+        @QueryParam("column") column: Int?
     ): Response {
+        if (row == null || column == null) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                .entity(mapOf("message" to "Row and column parameters are required"))
+                .build()
+        }
         val updatedGrid = gridService.handleCellClick(gridId, row, column)
         return Response.ok(updatedGrid).build()
     }

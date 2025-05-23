@@ -2,6 +2,7 @@ package com.gridgame
 
 import io.quarkus.test.junit.QuarkusTest
 import io.restassured.RestAssured.given
+import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.Matchers
 import org.hamcrest.Matchers.everyItem
@@ -215,7 +216,7 @@ class GridControllerTest {
                 .put("/grid/$gridId/click")
                 .then()
                 .statusCode(400)
-                .body("message", `is`("Row and column parameters are required"))
+                .body("message", equalTo("Row and column parameters are required"))
         }
     }
 }
