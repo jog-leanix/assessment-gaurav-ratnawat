@@ -25,7 +25,7 @@ class GridService(private val gridRepository: GridRepository) {
     }
 
     @Transactional
-    fun handleCellClick(gridId: Long, row: Int, column: Int): Grid? {
+    fun handleCellClick(gridId: Long, row: Int, column: Int): Grid {
         val grid = gridRepository.findById(gridId) ?: throw GridNotFoundException("Grid not found: id = $gridId")
         if (grid.cells.isEmpty()) {
             throw InvalidCellClickException("Grid is empty: grid  = $gridId")
