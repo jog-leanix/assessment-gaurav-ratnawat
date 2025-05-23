@@ -245,5 +245,28 @@ class GridControllerTest {
                 .body("message", containsString("Grid not found"))
         }
 
+        @Test
+        fun `should handle invalid cell click with out of bounds coordinates`() {
+            val response = given()
+                .queryParam("rows", 3)
+                .queryParam("columns", 3)
+                .`when`()
+                .post("/grid")
+                .then()
+                .statusCode(201)
+                .extract()
+                .response()
+
+            gridId = response.path("id")
+            given()
+                .queryParam("row", 10)
+                .queryParam("column", 10)
+                .`when`()
+                .put("/grid/$gridId/click")
+                .then()
+                .statusCode(400)
+                .body("message", containsString("Client clicked an invalid cell position: row=10, column=10 for grid " +
+                    " = $gridId"))
+        }
     }
 }
