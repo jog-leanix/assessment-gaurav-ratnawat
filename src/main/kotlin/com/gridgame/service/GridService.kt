@@ -49,6 +49,11 @@ class GridService(private val gridRepository: GridRepository) {
         return gridRepository.listAll()
     }
 
+    @Transactional
+    fun getGrid(id: Long): Grid? {
+        return gridRepository.findById(id)
+    }
+
     private fun isValidPosition(row: Int, column: Int, grid: Grid): Boolean {
         return row in 0 until grid.rows && column in 0 until grid.columns
     }
