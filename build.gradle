@@ -22,6 +22,7 @@ dependencies {
     testImplementation("org.testcontainers:postgresql:1.19.6")
     testImplementation("io.quarkus:quarkus-junit5")
     testImplementation("io.mockk:mockk:1.13.10")
+    testImplementation("io.rest-assured:rest-assured:5.4.0")
 }
 
 test {
