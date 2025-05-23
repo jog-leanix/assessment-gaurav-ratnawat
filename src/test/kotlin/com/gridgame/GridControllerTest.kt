@@ -130,4 +130,38 @@ class GridControllerTest {
         }
 
     }
+
+    @Nested
+    inner class GetGridById {
+
+        private var existingGridId: Long = 0
+
+        @Test
+        fun `should return grid when exists`() {
+            // Given - create a grid first
+            val response = given()
+                .queryParam("rows", 3)
+                .queryParam("columns", 3)
+                .`when`()
+                .post("/grid")
+                .then()
+                .statusCode(201)
+                .extract()
+                .response()
+
+            existingGridId = response.path("id")
+
+            // When - get the created grid
+            given()
+                .`when`()
+                .get("/grid/${existingGridId}")
+                .then()
+                .statusCode(200)
+                .body("id", `is`(existingGridId.toInt()))
+                .body("rows", `is`(3))
+                .body("columns", `is`(3))
+                .body("cells.size()", `is`(9))
+                .body("cells.value", everyItem(`is`(0)))
+        }
+    }
 }
