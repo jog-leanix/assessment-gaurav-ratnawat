@@ -66,6 +66,14 @@ class GridController {
             return Response.status(Response.Status.NOT_FOUND)
                 .entity(mapOf("message" to e.message))
                 .build()
+        } catch (e: InvalidCellClickException) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                .entity(mapOf("message" to e.message))
+                .build()
+        } catch (e: Exception) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity(mapOf("message" to "An unexpected error occurred"))
+                .build()
         }
     }
 
