@@ -1,7 +1,9 @@
 package com.gridgame
 
 import com.gridgame.model.Grid
+import com.gridgame.service.GridNotFoundException
 import com.gridgame.service.GridService
+import com.gridgame.service.InvalidCellClickException
 import jakarta.inject.Inject
 import jakarta.ws.rs.GET
 import jakarta.ws.rs.POST
@@ -52,13 +54,19 @@ class GridController {
         @QueryParam("row") row: Int?,
         @QueryParam("column") column: Int?
     ): Response {
-        if (row == null || column == null) {
-            return Response.status(Response.Status.BAD_REQUEST)
-                .entity(mapOf("message" to "Row and column parameters are required"))
+        try {
+            if (row == null || column == null) {
+                return Response.status(Response.Status.BAD_REQUEST)
+                    .entity(mapOf("message" to "Row and column parameters are required"))
+                    .build()
+            }
+            val updatedGrid = gridService.handleCellClick(gridId, row, column)
+            return Response.ok(updatedGrid).build()
+        } catch (e: GridNotFoundException) {
+            return Response.status(Response.Status.NOT_FOUND)
+                .entity(mapOf("message" to e.message))
                 .build()
         }
-        val updatedGrid = gridService.handleCellClick(gridId, row, column)
-        return Response.ok(updatedGrid).build()
     }
 
     companion object {
