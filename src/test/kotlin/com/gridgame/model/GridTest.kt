@@ -16,9 +16,9 @@ class GridTest {
 
     @Test
     fun `should initialize grid with zero value cells`() {
-        assertEquals(5, grid.rows)
-        assertEquals(5, grid.columns)
-        assertEquals(25, grid.cells.size)
+        assertEquals(50, grid.rows)
+        assertEquals(50, grid.columns)
+        assertEquals(2500, grid.cells.size)
 
         for (cell in grid.cells) {
             assertEquals(0, cell.value)
