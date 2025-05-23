@@ -281,4 +281,26 @@ class GridServiceTest {
         assertTrue(result.isEmpty())
         verify(exactly = 1) { gridRepository.listAll() }
     }
+
+    @Test
+    fun `should return grid by id when found`() {
+        // Given
+        val expectedGrid = Grid().apply {
+            id = 1L
+            rows = 3
+            columns = 3
+            initialize()
+        }
+        every { gridRepository.findById(1L) } returns expectedGrid
+
+        // When
+        val result = gridService.getGrid(1L)
+
+        // Then
+        assertNotNull(result)
+        assertEquals(expectedGrid.id, result?.id)
+        assertEquals(expectedGrid.rows, result?.rows)
+        assertEquals(expectedGrid.columns, result?.columns)
+        verify(exactly = 1) { gridRepository.findById(1L) }
+    }
 }
