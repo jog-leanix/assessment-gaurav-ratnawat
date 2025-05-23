@@ -30,4 +30,17 @@ class GridControllerTest {
         gridId = response.path("id")
     }
 
+    @Test
+    fun `should create grid with default values when no parameters provided`() {
+        given()
+            .`when`()
+            .post("/grid")
+            .then()
+            .statusCode(201)
+            .body("id", notNullValue())
+            .body("rows", `is`(50))
+            .body("columns", `is`(50))
+            .body("cells.size()", `is`(2500))
+    }
+
 }
