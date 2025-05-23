@@ -268,4 +268,17 @@ class GridServiceTest {
         assertEquals(2, result.size)
         verify(exactly = 1) { gridRepository.listAll() }
     }
+
+    @Test
+    fun `should return empty list when no grids exist`() {
+        // Given
+        every { gridRepository.listAll() } returns emptyList()
+
+        // When
+        val result = gridService.getAllGrids()
+
+        // Then
+        assertTrue(result.isEmpty())
+        verify(exactly = 1) { gridRepository.listAll() }
+    }
 }
