@@ -207,5 +207,15 @@ class GridControllerTest {
                 .body("cells.findAll { it.row != 1 && it.column != 1 }.value", everyItem(`is`(0))) // Other cells
         }
 
+        @Test
+        fun `should return 400 when row parameter is missing`() {
+            given()
+                .queryParam("column", 1)
+                .`when`()
+                .put("/grid/$gridId/click")
+                .then()
+                .statusCode(400)
+                .body("message", `is`("Row and column parameters are required"))
+        }
     }
 }
