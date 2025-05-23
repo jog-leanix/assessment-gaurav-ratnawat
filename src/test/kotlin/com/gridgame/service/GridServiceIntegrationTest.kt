@@ -127,4 +127,22 @@ class GridServiceIntegrationTest {
         val cell = updatedGrid?.cells?.find { it.row == 0 && it.column == 0 }
         assertEquals(2, cell?.value)
     }
+
+    @Test
+    @Transactional
+    fun `should return all persisted grids`() {
+        // Given
+        val grid1 = gridService.initializeGrid(3, 3)
+        val grid2 = gridService.initializeGrid(4, 4)
+
+        // When
+        val result = gridService.getAllGrids()
+
+        // Then
+        assertEquals(2, result.size)
+        assertTrue(result.any { it.id == grid1.id })
+        assertTrue(result.any { it.id == grid2.id })
+        assertTrue(result.any { it.rows == 3 && it.columns == 3 })
+        assertTrue(result.any { it.rows == 4 && it.columns == 4 })
+    }
 }
