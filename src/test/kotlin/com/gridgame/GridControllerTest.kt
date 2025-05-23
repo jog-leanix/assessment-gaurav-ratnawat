@@ -43,4 +43,17 @@ class GridControllerTest {
             .body("cells.size()", `is`(2500))
     }
 
+    @Test
+    fun `should create grid with custom rows only`() {
+        given()
+            .queryParam("rows", 5)
+            .`when`()
+            .post("/grid")
+            .then()
+            .statusCode(201)
+            .body("rows", `is`(5))
+            .body("columns", `is`(50))
+            .body("cells.size()", `is`(250))
+    }
+
 }
