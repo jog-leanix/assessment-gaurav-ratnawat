@@ -163,5 +163,14 @@ class GridControllerTest {
                 .body("cells.size()", `is`(9))
                 .body("cells.value", everyItem(`is`(0)))
         }
+
+        @Test
+        fun `should return 404 when grid does not exist`() {
+            given()
+                .`when`()
+                .get("/grid/999999")
+                .then()
+                .statusCode(404)
+        }
     }
 }
