@@ -182,4 +182,13 @@ class GridServiceIntegrationTest {
         assertEquals(9, result?.cells?.size)
     }
 
+    @Test
+    @Transactional
+    fun `should return null when grid id does not exist`() {
+        // When
+        val result = gridService.getGrid(999L)
+
+        // Then
+        assertNull(result)
+    }
 }
