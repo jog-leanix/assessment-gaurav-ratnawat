@@ -41,7 +41,9 @@ class GridController {
         return if (grid != null) {
             Response.ok(grid).build()
         } else {
-            Response.status(Response.Status.NOT_FOUND).build()
+            Response.status(Response.Status.NOT_FOUND)
+                . entity(mapOf("message" to "Grid not found"))
+                .build()
         }
     }
 
