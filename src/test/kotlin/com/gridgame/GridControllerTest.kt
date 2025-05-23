@@ -218,5 +218,16 @@ class GridControllerTest {
                 .statusCode(400)
                 .body("message", equalTo("Row and column parameters are required"))
         }
+
+        @Test
+        fun `should return 400 when column parameter is missing`() {
+            given()
+                .queryParam("row", 1)
+                .`when`()
+                .put("/grid/$gridId/click")
+                .then()
+                .statusCode(400)
+                .body("message", equalTo("Row and column parameters are required"))
+        }
     }
 }
