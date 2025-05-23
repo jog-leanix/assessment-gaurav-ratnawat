@@ -1,7 +1,5 @@
 package com.gridgame.exception
 
-import com.gridgame.service.GridNotFoundException
-import com.gridgame.service.InvalidCellClickException
 import jakarta.ws.rs.NotFoundException
 import jakarta.ws.rs.core.Response
 import jakarta.ws.rs.ext.ExceptionMapper
