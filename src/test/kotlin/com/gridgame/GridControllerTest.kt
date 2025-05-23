@@ -86,4 +86,30 @@ class GridControllerTest {
         }
     }
 
+    @Nested
+    inner class GetAllGrids {
+
+        @Test
+        fun `should return all grids`() {
+            createTestGrid(3, 3)
+            createTestGrid(4, 4)
+            given()
+                .`when`()
+                .get("/grid")
+                .then()
+                .statusCode(200)
+                .body("size()", org.hamcrest.Matchers.greaterThan(0))
+        }
+
+        private fun createTestGrid(rows: Int, columns: Int) {
+            given()
+                .queryParam("rows", rows)
+                .queryParam("columns", columns)
+                .`when`()
+                .post("/grid")
+                .then()
+                .statusCode(201)
+        }
+
+    }
 }
