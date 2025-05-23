@@ -6,6 +6,7 @@ import jakarta.inject.Inject
 import jakarta.ws.rs.GET
 import jakarta.ws.rs.POST
 import jakarta.ws.rs.Path
+import jakarta.ws.rs.PathParam
 import jakarta.ws.rs.Produces
 import jakarta.ws.rs.QueryParam
 import jakarta.ws.rs.core.MediaType
@@ -30,6 +31,17 @@ class GridController {
     @GET
     fun getAllGrids(): List<Grid> {
         return gridService.getAllGrids()
+    }
+
+    @GET
+    @Path("/{id}")
+    fun getGrid(@PathParam("id") id: Long): Response {
+        val grid = gridService.getGrid(id)
+        return if (grid != null) {
+            Response.ok(grid).build()
+        } else {
+            Response.status(Response.Status.NOT_FOUND).build()
+        }
     }
 
     companion object {
