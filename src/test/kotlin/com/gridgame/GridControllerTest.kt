@@ -173,4 +173,39 @@ class GridControllerTest {
                 .statusCode(404)
         }
     }
+
+    @Nested
+    inner class ClickCell {
+        private var gridId: Long = 0
+
+        @Test
+        fun `should increment values in row and column on valid click`() {
+            // Create a test grid first
+            val response = given()
+                .queryParam("rows", 3)
+                .queryParam("columns", 3)
+                .`when`()
+                .post("/grid")
+                .then()
+                .statusCode(201)
+                .extract()
+                .response()
+
+            gridId = response.path("id")
+
+            // Perform click
+            given()
+                .queryParam("row", 1)
+                .queryParam("column", 1)
+                .`when`()
+                .put("/grid/$gridId/click")
+                .then()
+                .statusCode(200)
+                .body("cells.find { it.row == 1 && it.column == 1 }.value", `is`(2)) // Intersection gets incremented twice
+                .body("cells.findAll { it.row == 1 && it.column != 1 }.value", everyItem(`is`(1))) // Same row
+                .body("cells.findAll { it.column == 1 && it.row != 1 }.value", everyItem(`is`(1))) // Same column
+                .body("cells.findAll { it.row != 1 && it.column != 1 }.value", everyItem(`is`(0))) // Other cells
+        }
+
+    }
 }
