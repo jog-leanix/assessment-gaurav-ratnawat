@@ -8,6 +8,7 @@ import jakarta.inject.Inject
 import jakarta.transaction.Transactional
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -163,4 +164,22 @@ class GridServiceIntegrationTest {
         // Then
         assertTrue(result.isEmpty())
     }
+
+    @Test
+    @Transactional
+    fun `should return grid by id when exists`() {
+        // Given
+        val grid = gridService.initializeGrid(3, 3)
+
+        // When
+        val result = gridService.getGrid(grid.id!!)
+
+        // Then
+        assertNotNull(result)
+        assertEquals(grid.id, result?.id)
+        assertEquals(3, result?.rows)
+        assertEquals(3, result?.columns)
+        assertEquals(9, result?.cells?.size)
+    }
+
 }
