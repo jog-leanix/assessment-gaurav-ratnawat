@@ -1,7 +1,9 @@
 package com.gridgame
 
+import com.gridgame.model.Grid
 import com.gridgame.service.GridService
 import jakarta.inject.Inject
+import jakarta.ws.rs.GET
 import jakarta.ws.rs.POST
 import jakarta.ws.rs.Path
 import jakarta.ws.rs.Produces
@@ -23,6 +25,11 @@ class GridController {
     ): Response {
         val createdGrid = gridService.initializeGrid(rows ?: DEFAULT_SIZE, columns ?: DEFAULT_SIZE)
         return Response.status(Response.Status.CREATED).entity(createdGrid).build()
+    }
+
+    @GET
+    fun getAllGrids(): List<Grid> {
+        return gridService.getAllGrids()
     }
 
     companion object {
