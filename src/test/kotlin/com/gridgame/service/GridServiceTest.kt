@@ -8,6 +8,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -23,6 +24,7 @@ class GridServiceTest {
     fun setUp() {
         gridRepository = mockk<GridRepository>()
         gridService = GridService(gridRepository)
+        every { gridRepository.persistAndFlush(any()) } returns Unit
     }
 
     @Test
@@ -302,5 +304,18 @@ class GridServiceTest {
         assertEquals(expectedGrid.rows, result?.rows)
         assertEquals(expectedGrid.columns, result?.columns)
         verify(exactly = 1) { gridRepository.findById(1L) }
+    }
+
+    @Test
+    fun `should return null when grid not found`() {
+        // Given
+        every { gridRepository.findById(999L) } returns null
+
+        // When
+        val result = gridService.getGrid(999L)
+
+        // Then
+        assertNull(result)
+        verify(exactly = 1) { gridRepository.findById(999L) }
     }
 }
