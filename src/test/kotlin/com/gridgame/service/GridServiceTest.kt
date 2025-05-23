@@ -8,6 +8,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
+import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
@@ -241,5 +242,30 @@ class GridServiceTest {
         }
         assertEquals(8, result.cells[5].value, "Cell at index 5 should increase its value")
         assertEquals(13, result.cells[6].value, "Cell at index 6 should increase its value")
+    }
+
+    @Test
+    fun `should return all grids`() {
+        // Given
+        val grid1 = Grid().apply {
+            rows = 3
+            columns = 3
+            initialize()
+        }
+        val grid2 = Grid().apply {
+            rows = 4
+            columns = 4
+            initialize()
+        }
+        val expectedGrids = listOf(grid1, grid2)
+        every { gridRepository.listAll() } returns expectedGrids
+
+        // When
+        val result = gridService.getAllGrids()
+
+        // Then
+        assertEquals(expectedGrids, result)
+        assertEquals(2, result.size)
+        verify(exactly = 1) { gridRepository.listAll() }
     }
 }
