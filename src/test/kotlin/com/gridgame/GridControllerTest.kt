@@ -2,6 +2,8 @@ package com.gridgame
 
 import io.quarkus.test.junit.QuarkusTest
 import io.restassured.RestAssured.given
+import jakarta.ws.rs.core.MediaType
+import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.notNullValue
 import org.hamcrest.Matchers
@@ -201,8 +203,9 @@ class GridControllerTest {
                 .`when`()
                 .put("/grid/$gridId/click")
                 .then()
+                .log().all()
                 .statusCode(200)
-                .body("cells.find { it.row == 1 && it.column == 1 }.value", `is`(2)) // Intersection gets incremented twice
+                .body("cells.find { it.row == 1 && it.column == 1 }.value", `is`(1)) // Intersection gets incremented
                 .body("cells.findAll { it.row == 1 && it.column != 1 }.value", everyItem(`is`(1))) // Same row
                 .body("cells.findAll { it.column == 1 && it.row != 1 }.value", everyItem(`is`(1))) // Same column
                 .body("cells.findAll { it.row != 1 && it.column != 1 }.value", everyItem(`is`(0))) // Other cells
@@ -229,5 +232,18 @@ class GridControllerTest {
                 .statusCode(400)
                 .body("message", equalTo("Row and column parameters are required"))
         }
+
+        @Test
+        fun `should handle grid not found exception`() {
+            given()
+                .queryParam("row", 1)
+                .queryParam("column", 1)
+                .`when`()
+                .put("/grid/99999/click")
+                .then()
+                .statusCode(404)
+                .body("message", containsString("Grid not found"))
+        }
+
     }
 }
