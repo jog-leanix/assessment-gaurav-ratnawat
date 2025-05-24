@@ -10,8 +10,7 @@ A secondary trait of the interactive grid is to identify the Fibonacci sequence.
 
 ⏰ We fully understand that many of our candidates have significant commitments and may not be able to dedicate extensive time to this coding challenge. If you find yourself constrained for time, please do not hesitate to prioritize those features and aspects of the application that best showcase your strengths, skills, and areas of expertise. In that case, feel free to list and explain potential enhancements.
 
-```markdown
-# Grid Game Backend - N26 Technical Assessment
+# Grid Game Backend - Technical Assessment
 
 A Kotlin-based backend service for an interactive grid game built with Quarkus and PostgreSQL.
 
@@ -35,6 +34,18 @@ This project implements a 50x50 interactive grid where:
 - JDK 17 or higher
 - Docker and Docker Compose
 - PostgreSQL 15 or higher
+
+## Development Process & TDD Approach
+
+This project was developed following Test-Driven Development (TDD) principles. You can follow the development 
+process through the commit history.
+
+Key commits showcase the TDD cycle:
+
+
+1. test: Writing failing tests
+2. impl: Making tests pass
+3. refactor: Improving code structure
 
 ## Getting Started
 
