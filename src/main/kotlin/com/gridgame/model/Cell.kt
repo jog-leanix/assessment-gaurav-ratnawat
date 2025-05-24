@@ -39,4 +39,17 @@ class Cell : PanacheEntity {
         this.value = value
         this.grid = grid
     }
+
+
+    fun increment() {
+        value++
+    }
+
+    fun clear() {
+        value = 0
+    }
+
+    fun isInRowOrColumn(targetRow: Int, targetColumn: Int): Boolean {
+        return row == targetRow || column == targetColumn
+    }
 }

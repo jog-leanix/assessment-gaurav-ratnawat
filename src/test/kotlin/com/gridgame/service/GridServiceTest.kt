@@ -1,5 +1,7 @@
 package com.gridgame.service
 
+import com.gridgame.exception.GridNotFoundException
+import com.gridgame.exception.InvalidCellClickException
 import com.gridgame.model.Cell
 import com.gridgame.model.Grid
 import com.gridgame.model.GridRepository

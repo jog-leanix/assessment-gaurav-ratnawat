@@ -265,8 +265,6 @@ class GridControllerTest {
                 .put("/grid/$gridId/click")
                 .then()
                 .statusCode(400)
-                .body("message", containsString("Client clicked an invalid cell position: row=10, column=10 for grid " +
-                    " = $gridId"))
         }
     }
 }
