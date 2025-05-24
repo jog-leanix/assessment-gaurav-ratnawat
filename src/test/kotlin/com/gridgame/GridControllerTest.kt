@@ -2,7 +2,6 @@ package com.gridgame
 
 import io.quarkus.test.junit.QuarkusTest
 import io.restassured.RestAssured.given
-import jakarta.ws.rs.core.MediaType
 import org.hamcrest.CoreMatchers.containsString
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.notNullValue
@@ -104,7 +103,7 @@ class GridControllerTest {
                 .get("/grid")
                 .then()
                 .statusCode(200)
-                .body("size()", org.hamcrest.Matchers.greaterThan(0))
+                .body("size()", Matchers.greaterThan(0))
         }
 
         @Test

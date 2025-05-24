@@ -57,7 +57,7 @@ class GridServiceTest {
 
         // Then
         assertNotNull(result)
-        result!!.cells.forEach { cell ->
+        result.cells.forEach { cell ->
             if (cell.row == 1 || cell.column == 1) {
                 assertEquals(1, cell.value)
             } else {
@@ -98,7 +98,7 @@ class GridServiceTest {
 
         // Then
         assertNotNull(result)
-        result!!.cells.forEach { cell ->
+        result.cells.forEach { cell ->
             assertEquals(0, cell.value, "Cell with Fibonacci number should be cleared")
         }
     }
@@ -155,7 +155,7 @@ class GridServiceTest {
 
         // Then
         assertNotNull(result)
-        result!!.cells.forEach { cell ->
+        result.cells.forEach { cell ->
             assertEquals(0, cell.value, "Cells should be cleared as they form a Fibonacci sequence")
         }
     }
@@ -181,7 +181,7 @@ class GridServiceTest {
 
         // Then
         assertNotNull(result)
-        result!!.cells.forEach { cell ->
+        result.cells.forEach { cell ->
             val expectedValue = when (cell.column) {
                 0 -> 233  // 232 + 1
                 1 -> 377  // 376 + 1
@@ -209,7 +209,7 @@ class GridServiceTest {
 
         // Then
         assertNotNull(result)
-        result!!.cells.forEach { cell ->
+        result.cells.forEach { cell ->
             when {
                 cell.row == 1 && cell.column == 1 -> assertEquals(2, cell.value)
                 cell.row == 1 || cell.column == 1 -> assertEquals(2, cell.value)
@@ -241,7 +241,7 @@ class GridServiceTest {
 
         // Then
         assertNotNull(result)
-        result!!.cells.take(5).forEach { cell ->
+        result.cells.take(5).forEach { cell ->
             assertEquals(0, cell.value, "First sequence should be cleared")
         }
         assertEquals(8, result.cells[5].value, "Cell at index 5 should increase its value")
